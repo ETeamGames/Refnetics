@@ -8,7 +8,15 @@ public class TrackingPathCamera : MonoBehaviour {
 
     void Start()
     {
-        iTween.MoveTo(this.gameObject, iTween.Hash("path", iTweenPath.GetPath(PathName), "time", time));
+        /*Hashtable param = new Hashtable();
+        param.Add("time", time);
+        param.Add("easeType", iTween.EaseType.easeInOutQuad);
+        param.Add("onstarttarget", gameObject);
+        param.Add("onstart", "startAction");
+        param.Add("oncompletetarget", gameObject);
+        param.Add("oncomplete", "compAction");
+        param.Add("path", iTweenPath.GetPath(PathName));*/
+        iTween.MoveTo(this.gameObject, iTween.Hash("time", time, "path", iTweenPath.GetPath(PathName), "oncomplete", "compAction", "oncompletetarget", gameObject, "onstart", "startAction", "onstarttarget", gameObject, "onupdate", "updateAction", "onupdatetarget", gameObject));
     }
 
 
