@@ -6,8 +6,9 @@ using System;
 /*
  * アタッチした対象のPosition, Rotation座標を一定フレーム毎にサンプリング(ファイル出力)するクラス
  * */
-public class Generator : MonoBehaviour {
-	FileInfo fi;
+public class PositionOutputer : MonoBehaviour {
+	private FileInfo fi;
+	private string outputFilePath = "OutputFiles/";
 	private string outputFileName = "outputFile.txt";
 	private string readFileName = "inputFile.txt";
 	private Vector3 pos;
@@ -22,24 +23,17 @@ public class Generator : MonoBehaviour {
 		// get initial 3-dim ordinates
 		pos = this.transform.position;
 
-		// get path
-		string txt = Application.dataPath;
-		string txt2 = Application.persistentDataPath;
-		Debug.Log(txt+","+txt2);
-
 		// initial writer
-		fi = new FileInfo(Application.dataPath + "/" + outputFileName);
+		fi = new FileInfo(Application.dataPath + "/" + outputFilePath + outputFileName);
 
 		// write initial label-values
 		this.WriteFile ("pos.x, pos.y, pos.z, rot.x , rot.y, rot.z");
-
-		// test part, read input-file
-		//this.ReadFile();
 
 		// other initialization
 		Init();
 	}
 
+	/** use for some initialization*/
 	void Init () {
 		samplingFrameNum = samplingFrameRate;
 	}
@@ -52,7 +46,7 @@ public class Generator : MonoBehaviour {
 			rot = this.transform.rotation;
 			this.WriteVecQuaToFile (pos, rot);
 			Init ();
-			Debug.Log ("data are sampled...");
+			Debug.Log ("some data are sampled...");
 		}
 	}
 
@@ -65,7 +59,7 @@ public class Generator : MonoBehaviour {
 
 	/** position(x, y, z)を書き込み*/
 	void WriteVectorToFile(Vector3 vec){
-		using (StreamWriter sw = fi.AppendText()){//上書き, Append-追加書き込み
+		using (StreamWriter sw = fi.CreateText()){//上書き, Append-追加書き込み, Create-新規書き込み
 			sw.WriteLine(vec.x+","+vec.y+","+vec.z);
 		}
 	}
@@ -75,23 +69,6 @@ public class Generator : MonoBehaviour {
 		using (StreamWriter sw = fi.AppendText()){//上書き, Append-追加書き込み
 			sw.WriteLine(vec.x+","+vec.y+","+vec.z+","+qua.x+","+qua.y+","+qua.z);
 		}
-	}
-
-	/** not used now*/
-	void ReadFile(){
-		FileInfo fi = new FileInfo(Application.dataPath + "/" + outputFileName);
-		try {
-			using (StreamReader sr = new StreamReader(fi.OpenRead())){
-				inputStr = sr.ReadToEnd();
-			}
-		} catch (Exception e){
-			Debug.Log ("read file error!");
-		}
-		Debug.Log (inputStr);
-	}
-
-	void OnDestroy(){
-		Debug.Log ("OnDestroy");
 	}
 
 }
