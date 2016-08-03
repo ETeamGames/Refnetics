@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class TestCollision : MonoBehaviour {
+public class TestLookScript : MonoBehaviour {
+    public GameObject targetObj;
 
 	// Use this for initialization
 	void Start () {
@@ -10,12 +11,6 @@ public class TestCollision : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-	
-	}
-
-    void OnTriggerEnter(Collider col)
-    {
-        Debug.Log("collision!!");
-        iTween.Pause();
+        this.gameObject.transform.LookAt(targetObj.transform);
     }
 }
