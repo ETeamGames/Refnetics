@@ -13,14 +13,22 @@ public class ObjectCreater : MonoBehaviour {
 	private int lowCount;
 	private int objNum;
 	private Queue<Vector3> objPosQueue = new Queue<Vector3>(){};
-	private Vector4[] objectsRot;
-
+	private Queue<Quaternion> objRotQueue = new Queue<Quaternion>(){};
+	/** 生成されるオブジェクト*/
 	[SerializeField] public GameObject createdObj;
 
 	public void process1(){
+		this.DeleteChildObjects ();
 		this.Init ();
 		this.ReadFile ();
 		this.CreateObjects ();
+	}
+
+	/// <summary>Deletes the all child objects of this.</summary>
+	void DeleteChildObjects(){
+		for( int i = this.transform.childCount - 1 ; i >= 0 ; --i ){
+			GameObject.DestroyImmediate( this.transform.GetChild( i ).gameObject );
+		}
 	}
 
 	private void Init(){
@@ -35,10 +43,11 @@ public class ObjectCreater : MonoBehaviour {
 
 		try {
 			using (StreamReader sr = new StreamReader(fi.OpenRead())){
-				while(sr.Peek() >= 0){
+				while( sr.Peek() >= 0 ){
 					string str = sr.ReadLine();
 					readedValues = str.Split(',');
-					if( lowCount++ > 0 ) this.saveVectorDataIntoQueue();
+					// labelは例外処理
+					if( lowCount++ > 0 ) this.saveDataIntoQueue();
 				}
 			}
 		} catch (IOException e){
@@ -46,19 +55,26 @@ public class ObjectCreater : MonoBehaviour {
 		}
 	}
 
-	/** 読み込んだデータをVector3形式でQueueに保存*/
-	private void saveVectorDataIntoQueue(){
-		float x, y, z;
+	/** 読み込んだデータをVector3,Quaternion型でQueueに保存*/
+	private void saveDataIntoQueue(){
+		float x, y, z, w;
+		// Transform.position
 		x = float.Parse(readedValues[0]);
 		y = float.Parse(readedValues[1]);
 		z = float.Parse(readedValues[2]);
 		objPosQueue.Enqueue (new Vector3(x,y,z));
+		// Transform.rotation
+		x = float.Parse(readedValues[3]);
+		y = float.Parse(readedValues[4]);
+		z = float.Parse(readedValues[5]);
+		w = float.Parse(readedValues[6]);
+		objRotQueue.Enqueue (new Quaternion(x,y,z,w));
 	}
 
 	/** 保存したデータを基に、オブジェクトを子要素として生成*/
 	private void CreateObjects(){
 		while (objPosQueue.Count > 0) {
-			GameObject go = (GameObject)Instantiate(createdObj, objPosQueue.Dequeue(), Quaternion.identity);
+			GameObject go = (GameObject)Instantiate(createdObj, objPosQueue.Dequeue(), objRotQueue.Dequeue());
 			go.transform.SetParent (this.transform, true);
 		}
 	}
