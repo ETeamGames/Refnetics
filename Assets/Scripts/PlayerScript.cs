@@ -31,6 +31,6 @@ public class PlayerScript : MonoBehaviour {
     }
     public void updateAction()
     {
-        Debug.Log("itween path update");
+        //Debug.Log("itween path update");
     }
 }
