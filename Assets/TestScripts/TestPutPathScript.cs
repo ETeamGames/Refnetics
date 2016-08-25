@@ -39,5 +39,14 @@ public class TestPutPathScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        /*foreach (PUTPATHINFO go in objects)
+        {
+            iTween.PutOnPath(go.obj, iTweenPath.GetPath(PathName), Mathf.Clamp(go.position, 0, 1));
+            iTween.PutOnPath(ob, iTweenPath.GetPath(PathName), Mathf.Clamp(go.position - 0.0001f, 0, 1f));
+            if (go.collider != null)
+                iTween.PutOnPath(go.collider, iTweenPath.GetPath(PathName), Mathf.Clamp(go.colPosition, 0, 1));
+            go.obj.transform.LookAt(ob.transform);
+            go.obj.transform.Rotate(rot);
+        }*/
     }
 }
