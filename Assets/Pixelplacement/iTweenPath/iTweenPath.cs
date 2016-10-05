@@ -22,6 +22,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 
+[ExecuteInEditMode]
 [AddComponentMenu("Pixelplacement/iTweenPath")]
 public class iTweenPath : MonoBehaviour
 {

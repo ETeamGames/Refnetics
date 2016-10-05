@@ -39,6 +39,7 @@ using System.Reflection;
 using UnityEngine;
 #endregion
 
+[ExecuteInEditMode]
 /// <summary>
 /// <para>Version: 2.0.5</para>	 
 /// <para>Author: Bob Berkebile (http://pixelplacement.com)</para>
